@@ -6,25 +6,11 @@
 /*   By: mtellal <mtellal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 17:32:36 by mtellal           #+#    #+#             */
-/*   Updated: 2022/03/09 17:36:33 by mtellal          ###   ########.fr       */
+/*   Updated: 2022/03/10 08:54:35 by mtellal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/*
- *	creer un tableau de threads
- */
-
-void	*create_tab(int nb)
-{
-	pthread_t	*tab;
-
-	tab = malloc(sizeof(pthread_t) * nb);
-	if (!tab)
-		return (NULL);
-	return (tab);
-}
 
 /*
  *	rassemble l'ensemble des threads une fois la simulation terminee 	
@@ -93,6 +79,21 @@ void	*verify(void *philo)
 	return (NULL);
 }
 
+int	init_and_verify(pthread_t *th, t_philo *p, int nb, t_data *d)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb)
+	{
+		init_philo(&p[i], i, d);
+		i++;
+	}
+	if (pthread_create(th, NULL, verify, p) != 0)
+		return (0);
+	return (1);
+}
+
 /*
  *      creer et initialise un tableau de philo p
  *      et lance autant de threads qu'il n y a de philo
@@ -103,15 +104,14 @@ void	create_threads(pthread_t *t, t_philo *p, int nb, t_data *d)
 	int			i;
 	pthread_t	th;
 
-	i = 0 - nb;
-	while (i < 0)
-	{
-		init_philo(&p[nb - i * -1], nb - i * -1, d);
-		i++;
-	}
-	pthread_create(&th, NULL, verify, p);
+	i = 0;
+	if (!init_and_verify(&th, p, nb, d))
+		return ;
 	if (d->nbp == 1)
-		pthread_create(&t[0], NULL, &philo_one, &p[0]);
+	{
+		if (pthread_create(&t[0], NULL, &philo_one, &p[0]) != 0)
+			return ;
+	}
 	else
 	{
 		while (i < nb)

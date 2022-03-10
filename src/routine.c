@@ -6,7 +6,7 @@
 /*   By: mtellal <mtellal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 17:30:56 by mtellal           #+#    #+#             */
-/*   Updated: 2022/03/09 18:24:13 by mtellal          ###   ########.fr       */
+/*   Updated: 2022/03/10 08:39:18 by mtellal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*routine(void *philo)
 	data = p->d;
 	id = *p->id;
 	if (id % 2)
-		usleep(15000);
+		usleep(10000);
 	while (p->d->must_e == -1 || p->d->must_e != *p->nm)
 	{
 		pthread_mutex_lock(&data->death);
